@@ -1,0 +1,10 @@
+package com.scc.model;
+
+public enum PlayerAttribute {
+	BATSMAN,
+	BOWLER,
+	BOWLING_ALLROUNDER,
+	BATTING_ALLROUNDER,
+	WICKETKEEPER,
+	WICKETKEEPING_ALLROUNDER;
+}
