@@ -17,11 +17,14 @@ public class PlayerStatPerMatch {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Player player;
 
-	private Long runsScored;
+	private Integer runsScored;
 	private Long BallsPlayed;
+	private boolean hasBatted;
 	private boolean notOut;
+	private boolean hasBowled;
 	private Long oversBowled;
 	private Long runsGiven;
+	private Long wicketsTaken;
 
 	public Long getId() {
 		return id;
@@ -39,11 +42,11 @@ public class PlayerStatPerMatch {
 		this.player = player;
 	}
 
-	public Long getRunsScored() {
+	public Integer getRunsScored() {
 		return runsScored;
 	}
 
-	public void setRunsScored(Long runsScored) {
+	public void setRunsScored(Integer runsScored) {
 		this.runsScored = runsScored;
 	}
 
@@ -77,6 +80,30 @@ public class PlayerStatPerMatch {
 
 	public void setRunsGiven(Long runsGiven) {
 		this.runsGiven = runsGiven;
+	}
+
+	public boolean hasBatted() {
+		return hasBatted;
+	}
+
+	public void setHasBatted(boolean hasBatted) {
+		this.hasBatted = hasBatted;
+	}
+
+	public boolean hasBowled() {
+		return hasBowled;
+	}
+
+	public void setHasBowled(boolean hasBowled) {
+		this.hasBowled = hasBowled;
+	}
+
+	public Long getWicketsTaken() {
+		return wicketsTaken;
+	}
+
+	public void setWicketsTaken(Long wicketsTaken) {
+		this.wicketsTaken = wicketsTaken;
 	}
 
 }
