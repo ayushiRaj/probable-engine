@@ -24,6 +24,9 @@ public class BowlingStats {
 	@Column(nullable = false)
 	private Long bestFiguresRunsGiven;
 
+	@Column(nullable = false)
+	private Long totalRunsGiven;
+
 	public Long getOversBowled() {
 		return oversBowled;
 	}
@@ -62,6 +65,14 @@ public class BowlingStats {
 
 	public void setBestFiguresRunsGiven(Long bestFiguresRunsGiven) {
 		this.bestFiguresRunsGiven = bestFiguresRunsGiven;
+	}
+
+	public Long getTotalRunsGiven() {
+		return totalRunsGiven;
+	}
+
+	public void setTotalRunsGiven(Long totalRunsGiven) {
+		this.totalRunsGiven = totalRunsGiven;
 	}
 
 	@Override
