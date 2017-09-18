@@ -14,22 +14,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scc.data.repository.PlayerRepository;
+import com.scc.manager.StatsManager;
 import com.scc.model.BattingStats;
 import com.scc.model.BowlingStats;
 import com.scc.model.Player;
 import com.scc.model.PlayerAttribute;
+import com.scc.model.PlayerStatPerMatch;
 
 @RestController
 public class PlayerController {
 
 	@Inject
 	private PlayerRepository playerRepository;
+	
+	@Inject
+	private StatsManager statsManager;
 
 	@RequestMapping(value = "/createPlayer", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public HttpEntity<String> addANewPlayer(@RequestBody Map<String, String> details, HttpServletRequest request) {
 		ResponseEntity<String> response = null;
 		Player player = mapPlayer(details);
 		playerRepository.save(player);
+		return response;
+	}
+	
+	@RequestMapping(value = "/addPlayerData", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public HttpEntity<String> addDataForAPlayer(@RequestBody PlayerStatPerMatch stat){
+		ResponseEntity<String> response = null;
+		System.out.println(stat.toString());
+		System.out.println(stat.getPlayer().toString());
+		statsManager.updatePlayerData(stat);
 		return response;
 	}
 
@@ -55,6 +69,7 @@ public class PlayerController {
 		player.getBowlingStats().setWicketsTaken(0L);
 		player.getBowlingStats().setBestFiguresRunsGiven(0L);
 		player.getBowlingStats().setBestFiguresWicket(0L);
+		player.getBowlingStats().setTotalRunsGiven(0L);
 		return player;
 	}
 }

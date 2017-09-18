@@ -18,7 +18,7 @@ public class PlayerStatPerMatch {
 	private Player player;
 
 	private Integer runsScored;
-	private Long BallsPlayed;
+	private Long ballsPlayed;
 	private boolean hasBatted;
 	private boolean notOut;
 	private boolean hasBowled;
@@ -51,11 +51,11 @@ public class PlayerStatPerMatch {
 	}
 
 	public Long getBallsPlayed() {
-		return BallsPlayed;
+		return ballsPlayed;
 	}
 
 	public void setBallsPlayed(Long ballsPlayed) {
-		BallsPlayed = ballsPlayed;
+		this.ballsPlayed = ballsPlayed;
 	}
 
 	public boolean isNotOut() {
@@ -105,5 +105,14 @@ public class PlayerStatPerMatch {
 	public void setWicketsTaken(Long wicketsTaken) {
 		this.wicketsTaken = wicketsTaken;
 	}
+
+	@Override
+	public String toString() {
+		return "PlayerStatPerMatch [id=" + id + ", player=" + player + ", runsScored=" + runsScored + ", ballsPlayed="
+				+ ballsPlayed + ", hasBatted=" + hasBatted + ", notOut=" + notOut + ", hasBowled=" + hasBowled
+				+ ", oversBowled=" + oversBowled + ", runsGiven=" + runsGiven + ", wicketsTaken=" + wicketsTaken + "]";
+	}
+	
+	
 
 }

@@ -28,21 +28,32 @@ public class StatsManager {
 	}
 
 	protected Player calculateBattingAverage(Player player) {
-		double battingAverage = player.getBattingStats().getTotalRunsScored()
-				/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
+		double battingAverage = 0;
+		try {
+			battingAverage = (1.00 * player.getBattingStats().getTotalRunsScored())
+					/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
+		} catch (ArithmeticException e) {
+
+		}
 		player.getBattingStats().setBattingAverage(battingAverage);
 		return player;
 	}
 
 	protected Player calculateEconomyRate(Player player) {
-		double economyRate = player.getBowlingStats().getTotalRunsGiven() / player.getBowlingStats().getOversBowled();
+		double economyRate = 0;
+		try {
+			economyRate = (1.00 * player.getBowlingStats().getTotalRunsGiven())
+					/ player.getBowlingStats().getOversBowled();
+		} catch (ArithmeticException e) {
+		}
 		player.getBowlingStats().setEconomyRate(economyRate);
 		return player;
 	}
 
 	public void updatePlayerData(PlayerStatPerMatch stat) {
 		perMatchRepository.save(stat);
-		Player player = stat.getPlayer();
+		Player player = playerRepo.findOne(stat.getPlayer().getId());
+		stat.setPlayer(player);
 		BattingStats batting = player.getBattingStats();
 		BowlingStats bowling = player.getBowlingStats();
 		if (stat.hasBatted()) {
