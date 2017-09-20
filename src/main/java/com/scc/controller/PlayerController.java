@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class PlayerController {
 
 	@Inject
 	private PlayerRepository playerRepository;
-	
+
 	@Inject
 	private StatsManager statsManager;
 
@@ -37,13 +38,16 @@ public class PlayerController {
 		playerRepository.save(player);
 		return response;
 	}
-	
+
 	@RequestMapping(value = "/addPlayerData", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public HttpEntity<String> addDataForAPlayer(@RequestBody PlayerStatPerMatch stat){
+	public HttpEntity<String> addDataForAPlayer(@RequestBody PlayerStatPerMatch stat) {
 		ResponseEntity<String> response = null;
-		System.out.println(stat.toString());
-		System.out.println(stat.getPlayer().toString());
-		statsManager.updatePlayerData(stat);
+		boolean dataAdded = statsManager.updatePlayerData(stat);
+		if (dataAdded) {
+			response = new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
 		return response;
 	}
 
