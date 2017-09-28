@@ -14,25 +14,25 @@ import com.scc.controller.PlayerController;
 import com.scc.data.repository.PlayerRepository;
 import com.scc.model.Player;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@Profile("dev")
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
+//@Profile("dev")
 public class SccStatsApplicationTests {
 
-	@Autowired
-	private PlayerController controller;
-
-	@Autowired
-	private PlayerRepository repo;
-
-	@Test
-	public void contextLoads() {
-		Map<String, String> map = new HashMap<>();
-		map.put("attribute", "BOWLER");
-		map.put("name", "david");
-		controller.addANewPlayer(map, null);
-//		repo.findAllPlayerNames().stream().forEach(System.out::println);
-		
-	}
+//	@Autowired
+//	private PlayerController controller;
+//
+//	@Autowired
+//	private PlayerRepository repo;
+//
+//	@Test
+//	public void contextLoads() {
+//		Map<String, String> map = new HashMap<>();
+//		map.put("attribute", "BOWLER");
+//		map.put("name", "david");
+//		controller.addANewPlayer(map, null);
+////		repo.findAllPlayerNames().stream().forEach(System.out::println);
+//		
+//	}
 
 }
