@@ -3,5 +3,5 @@
   "group": "stable",
   "dist": "trusty",
   "os": "linux",
-  "install": "mvn clean install -Dspring.profiles.active=dev -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+  "install": "mvn clean install spring-boot:run -Dspring.profiles.active=dev -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
 }
