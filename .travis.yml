@@ -2,5 +2,6 @@
   "language": "java",
   "group": "stable",
   "dist": "trusty",
-  "os": "linux"
+  "os": "linux",
+  "install": "mvn clean install -Dspring.profiles.active=dev -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
 }
