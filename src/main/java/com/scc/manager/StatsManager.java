@@ -31,10 +31,12 @@ public class StatsManager {
 	protected Player calculateBattingAverage(Player player) {
 		double battingAverage = 0;
 		try {
-			battingAverage = (1.00 * player.getBattingStats().getTotalRunsScored())
-					/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
-			String df = String.format("%.2f", battingAverage);
-			battingAverage = Double.parseDouble(df);
+			if((player.getBattingStats().getInningsBatted()-player.getBattingStats().getNotOuts()) > 0){
+				battingAverage = (1.00 * player.getBattingStats().getTotalRunsScored())
+						/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
+				String df = String.format("%.2f", battingAverage);
+				battingAverage = Double.parseDouble(df);
+			}
 		} catch (ArithmeticException e) {
 
 		}
@@ -45,11 +47,14 @@ public class StatsManager {
 	protected Player calculateEconomyRate(Player player) {
 		double economyRate = 0;
 		try {
-			economyRate = (1.00 * player.getBowlingStats().getTotalRunsGiven())
-					/ player.getBowlingStats().getOversBowled();
-			String df = String.format("%.2f", economyRate);
-			economyRate = Double.parseDouble(df);
+			if (player.getBowlingStats().getOversBowled() > 0) {
+				economyRate = (1.00 * player.getBowlingStats().getTotalRunsGiven())
+						/ player.getBowlingStats().getOversBowled();
+				String df = String.format("%.2f", economyRate);
+				economyRate = Double.parseDouble(df);
+			}
 		} catch (ArithmeticException e) {
+		} catch (Exception e) {
 		}
 		player.getBowlingStats().setEconomyRate(economyRate);
 		return player;
@@ -69,7 +74,6 @@ public class StatsManager {
 				if (stat.isNotOut()) {
 					batting.setNotOuts(batting.getNotOuts() + 1);
 				}
-				player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
 				batting.setTotalBallsPlayed(batting.getTotalBallsPlayed() + stat.getBallsPlayed());
 				batting.setTotalRunsScored(batting.getTotalRunsScored() + stat.getRunsScored());
 			}
@@ -80,6 +84,7 @@ public class StatsManager {
 				bowling.setTotalRunsGiven(bowling.getTotalRunsGiven() + stat.getRunsGiven());
 			}
 			this.calculateEconomyAndBattingAverage(player);
+			player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
 			playerRepo.save(player);
 			return true;
 		} catch (Exception e) {

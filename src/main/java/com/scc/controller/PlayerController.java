@@ -42,7 +42,12 @@ public class PlayerController {
 	@RequestMapping(value = "/addPlayerData", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public HttpEntity<String> addDataForAPlayer(@RequestBody PlayerStatPerMatch stat) {
 		ResponseEntity<String> response = null;
-		boolean dataAdded = statsManager.updatePlayerData(stat);
+		boolean dataAdded = false;
+		try {
+			dataAdded = statsManager.updatePlayerData(stat);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (dataAdded) {
 			response = new ResponseEntity<>(HttpStatus.OK);
 		} else {
