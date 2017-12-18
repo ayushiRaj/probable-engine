@@ -19,19 +19,19 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String playerName;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private PlayerAttribute playerAttribute;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private Long totalMatchesPlayed;
-	
+
 	@Embedded
 	private BattingStats battingStats;
-	
+
 	@Embedded
 	private BowlingStats bowlingStats;
 
