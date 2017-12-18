@@ -26,6 +26,8 @@ public class BattingStats {
 	
 	@Column(nullable=false)
 	private Integer highestScore;
+	
+	private Double strikeRate;
 
 	public Long getInningsBatted() {
 		return inningsBatted;
@@ -75,6 +77,14 @@ public class BattingStats {
 		this.highestScore = highestScore;
 	}
 	
+	public Double getStrikeRate() {
+		return strikeRate;
+	}
+
+	public void setStrikeRate(Double strikeRate) {
+		this.strikeRate = strikeRate;
+	}
+
 	@Override
 	public String toString() {
 		ObjectMapper mapper = new ObjectMapper();

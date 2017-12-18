@@ -3,6 +3,8 @@ package com.scc.manager;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.scc.data.repository.PlayerRepository;
@@ -21,9 +23,12 @@ public class StatsManager {
 	@Inject
 	private PlayerStatPerMatchRepository perMatchRepository;
 
-	public Player calculateEconomyAndBattingAverage(Player player) {
+	private final static Logger LOGGER = LoggerFactory.getLogger(StatsManager.class);
+
+	public Player calculateEconomyAndBattingAverageAndStrikeRate(Player player) {
 		this.calculateBattingAverage(player);
 		this.calculateEconomyRate(player);
+		this.calculateStrikeRate(player);
 		playerRepo.save(player);
 		return player;
 	}
@@ -36,7 +41,9 @@ public class StatsManager {
 			String df = String.format("%.2f", battingAverage);
 			battingAverage = Double.parseDouble(df);
 		} catch (ArithmeticException e) {
-
+			LOGGER.error(
+					"Arithmetic exception while calculating batting average, default setting to 0 for player name : {}",
+					player.getPlayerName());
 		}
 		player.getBattingStats().setBattingAverage(battingAverage);
 		return player;
@@ -50,6 +57,8 @@ public class StatsManager {
 			String df = String.format("%.2f", economyRate);
 			economyRate = Double.parseDouble(df);
 		} catch (ArithmeticException e) {
+			LOGGER.error("Arithmetic exception while calculating economy, default setting to 0 for player name : {}",
+					player.getPlayerName());
 		}
 		player.getBowlingStats().setEconomyRate(economyRate);
 		return player;
@@ -69,7 +78,6 @@ public class StatsManager {
 				if (stat.isNotOut()) {
 					batting.setNotOuts(batting.getNotOuts() + 1);
 				}
-				player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
 				batting.setTotalBallsPlayed(batting.getTotalBallsPlayed() + stat.getBallsPlayed());
 				batting.setTotalRunsScored(batting.getTotalRunsScored() + stat.getRunsScored());
 			}
@@ -79,11 +87,12 @@ public class StatsManager {
 				bowling.setOversBowled(bowling.getOversBowled() + stat.getOversBowled());
 				bowling.setTotalRunsGiven(bowling.getTotalRunsGiven() + stat.getRunsGiven());
 			}
-			this.calculateEconomyAndBattingAverage(player);
+			this.calculateEconomyAndBattingAverageAndStrikeRate(player);
+			player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
 			playerRepo.save(player);
 			return true;
 		} catch (Exception e) {
-			System.out.println("Exception caught");
+			LOGGER.error("Error caught while adding match data for playerId: {}", stat.getPlayer().getId());
 			return false;
 		}
 
@@ -103,14 +112,27 @@ public class StatsManager {
 				player.getBowlingStats().setBestFiguresRunsGiven(stat.getRunsGiven());
 			}
 		}
-		System.out.println(player.getBowlingStats().getBestFiguresRunsGiven());
 		if (stat.getWicketsTaken() >= player.getBowlingStats().getBestFiguresWicket()) {
 			player.getBowlingStats().setBestFiguresWicket(stat.getWicketsTaken());
 			if (stat.getRunsGiven() < player.getBowlingStats().getBestFiguresRunsGiven()) {
 				player.getBowlingStats().setBestFiguresRunsGiven(stat.getRunsGiven());
 			}
-
 		}
-		System.out.println(player.getBowlingStats().getBestFiguresRunsGiven());
+	}
+
+	protected Player calculateStrikeRate(Player player) {
+		double strikeRate = 0;
+		try {
+			strikeRate = (100.00 * player.getBattingStats().getTotalRunsScored())
+					/ (player.getBattingStats().getTotalBallsPlayed());
+			String df = String.format("%.2f", strikeRate);
+			strikeRate = Double.parseDouble(df);
+		} catch (ArithmeticException e) {
+			LOGGER.error(
+					"Arithmetic exception while calculating strike rate, default setting to 0 for player name : {}",
+					player.getPlayerName());
+		}
+		 player.getBattingStats().setStrikeRate(strikeRate);
+		return player;
 	}
 }
