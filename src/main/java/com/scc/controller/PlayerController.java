@@ -72,6 +72,7 @@ public class PlayerController {
 		player.getBattingStats().setTotalRunsScored(0L);
 		player.getBattingStats().setBattingAverage(0.0);
 		player.getBattingStats().setInningsBatted(0L);
+		player.getBattingStats().setStrikeRate(0.0);
 		// Initializing bowling stats
 		player.getBowlingStats().setEconomyRate(0.00);
 		player.getBowlingStats().setOversBowled(0L);
