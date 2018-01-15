@@ -60,24 +60,39 @@ public class StatsUtil {
 	}
 
 	public static Long calculateTotalNumberOfNotOuts(List<PlayerStatPerMatch> matchRecords) {
-		Long inningsBatted = matchRecords.stream().filter(record -> record.hasBatted() && record.isNotOut()).count();
+		Long inningsBatted = 0L;
+		inningsBatted = matchRecords.stream().filter(record -> record.hasBatted() && record.isNotOut()).count();
 		return inningsBatted;
 	}
 
 	public static Long calculateTotalNumberOfRunsScored(List<PlayerStatPerMatch> matchRecords) {
-		Long runsScored = matchRecords.stream().filter(record -> record.hasBatted() && record.getRunsScored() > 0)
+		Long runsScored = 0L;
+		runsScored = matchRecords.stream().filter(record -> record.hasBatted() && record.getRunsScored() > 0)
 				.mapToLong(PlayerStatPerMatch::getRunsScored).sum();
 		return runsScored;
 	}
 
 	public static Long calculateTotalNumberOfTimesBatted(List<PlayerStatPerMatch> matchRecords) {
-		Long timesBatted = matchRecords.stream().filter(record -> record.hasBatted()).count();
+		Long timesBatted = 0L;
+		timesBatted = matchRecords.stream().filter(record -> record.hasBatted()).count();
 		return timesBatted;
 	}
 
 	public static Long calculateTotalBallsPlayed(List<PlayerStatPerMatch> matchRecords) {
-		Long ballsPlayed = matchRecords.stream().filter(record -> record.hasBatted() && record.getBallsPlayed() > 0)
+		Long ballsPlayed = 0L;
+		ballsPlayed = matchRecords.stream().filter(record -> record.hasBatted() && record.getBallsPlayed() > 0)
 				.mapToLong(PlayerStatPerMatch::getBallsPlayed).sum();
 		return ballsPlayed;
+	}
+
+	public static Long calculateTotalMatchesPlayed(List<PlayerStatPerMatch> matchRecords) {
+		return matchRecords.stream().filter(record -> record.hasBatted() || record.hasBowled()).count();
+	}
+
+	public static Long calculateTotalNumberOfRunsGiven(List<PlayerStatPerMatch> matchRecords) {
+		Long runsGiven = 0L;
+		runsGiven = matchRecords.stream().filter(record -> record.hasBowled() && record.getRunsGiven() > 0)
+				.mapToLong(PlayerStatPerMatch::getRunsGiven).sum();
+		return runsGiven;
 	}
 }
