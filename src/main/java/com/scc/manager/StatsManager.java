@@ -53,12 +53,16 @@ public class StatsManager {
 				}
 				batting.setTotalBallsPlayed(batting.getTotalBallsPlayed() + stat.getBallsPlayed());
 				batting.setTotalRunsScored(batting.getTotalRunsScored() + stat.getRunsScored());
+				batting.setTotalFoursScored(batting.getTotalFoursScored() + stat.getFours());
+				batting.setTotalSixesScored(batting.getTotalSixesScored() + stat.getSixes());
 			}
 			if (stat.hasBowled()) {
 				this.updateBestBowlingFigures(stat);
 				bowling.setWicketsTaken(bowling.getWicketsTaken() + stat.getWicketsTaken());
 				bowling.setOversBowled(bowling.getOversBowled() + stat.getOversBowled());
 				bowling.setTotalRunsGiven(bowling.getTotalRunsGiven() + stat.getRunsGiven());
+				bowling.setTotalWidesBowled(bowling.getTotalWidesBowled() + stat.getWides());
+				bowling.setTotalNoBallsBowled(bowling.getTotalNoBallsBowled() + stat.getNoBalls());
 			}
 			this.calculateEconomyAndBattingAverageAndStrikeRate(player);
 			player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
@@ -66,6 +70,7 @@ public class StatsManager {
 			return true;
 		} catch (Exception e) {
 			LOGGER.error("Error caught while adding match data for playerId: {}", stat.getPlayer().getId());
+			LOGGER.error("Stringified stat object: {}", stat.toString());
 			return false;
 		}
 
