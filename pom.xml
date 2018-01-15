@@ -6,7 +6,6 @@
 	<groupId>com.scc</groupId>
 	<artifactId>scc-stats</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
-
 	<name>scc-stats</name>
 	<description>Project to capture and provide stats for scc team</description>
 
