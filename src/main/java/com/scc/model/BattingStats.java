@@ -29,6 +29,12 @@ public class BattingStats {
 	
 	private Double strikeRate;
 
+	@Column(nullable = false)
+	private Integer totalSixesScored;
+
+	@Column(nullable = false)
+	private Integer totalFoursScored;
+
 	public Long getInningsBatted() {
 		return inningsBatted;
 	}
@@ -83,6 +89,22 @@ public class BattingStats {
 
 	public void setStrikeRate(Double strikeRate) {
 		this.strikeRate = strikeRate;
+	}
+
+	public Integer getTotalSixesScored() {
+		return totalSixesScored;
+	}
+
+	public void setTotalSixesScored(Integer totalSixesScored) {
+		this.totalSixesScored = totalSixesScored;
+	}
+
+	public Integer getTotalFoursScored() {
+		return totalFoursScored;
+	}
+
+	public void setTotalFoursScored(Integer totalFoursScored) {
+		this.totalFoursScored = totalFoursScored;
 	}
 
 	@Override

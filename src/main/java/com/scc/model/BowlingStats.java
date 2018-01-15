@@ -27,6 +27,12 @@ public class BowlingStats {
 	@Column(nullable = false)
 	private Long totalRunsGiven;
 
+	@Column(nullable = false)
+	private Integer totalWidesBowled;
+
+	@Column(nullable = false)
+	private Integer totalNoBallsBowled;
+
 	public Long getOversBowled() {
 		return oversBowled;
 	}
@@ -73,6 +79,22 @@ public class BowlingStats {
 
 	public void setTotalRunsGiven(Long totalRunsGiven) {
 		this.totalRunsGiven = totalRunsGiven;
+	}
+
+	public Integer getTotalWidesBowled() {
+		return totalWidesBowled;
+	}
+
+	public void setTotalWidesBowled(Integer totalWidesBowled) {
+		this.totalWidesBowled = totalWidesBowled;
+	}
+
+	public Integer getTotalNoBallsBowled() {
+		return totalNoBallsBowled;
+	}
+
+	public void setTotalNoBallsBowled(Integer totalNoBallsBowled) {
+		this.totalNoBallsBowled = totalNoBallsBowled;
 	}
 
 	@Override

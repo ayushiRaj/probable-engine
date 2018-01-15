@@ -21,6 +21,7 @@ import com.scc.model.BowlingStats;
 import com.scc.model.Player;
 import com.scc.model.PlayerAttribute;
 import com.scc.model.PlayerStatPerMatch;
+import com.scc.util.PlayerUtil;
 
 @RestController
 public class PlayerController {
@@ -34,7 +35,7 @@ public class PlayerController {
 	@RequestMapping(value = "/createPlayer", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public HttpEntity<String> addANewPlayer(@RequestBody Map<String, String> details, HttpServletRequest request) {
 		ResponseEntity<String> response = null;
-		Player player = mapPlayer(details);
+		Player player = PlayerUtil.mapNewPlayer(details);
 		playerRepository.save(player);
 		return response;
 	}
@@ -56,30 +57,4 @@ public class PlayerController {
 		return response;
 	}
 
-	private Player mapPlayer(Map<String, String> playerData) {
-		Player player = new Player();
-		player.setPlayerName(playerData.get("name"));
-		player.setPlayerAttribute(PlayerAttribute.valueOf(playerData.get("attribute")));
-		player.setTotalMatchesPlayed(0L);
-		BattingStats battingStats = new BattingStats();
-		BowlingStats bowlingStats = new BowlingStats();
-		player.setBattingStats(battingStats);
-		player.setBowlingStats(bowlingStats);
-		// Initializing batting stats
-		player.getBattingStats().setHighestScore(0);
-		player.getBattingStats().setNotOuts(0);
-		player.getBattingStats().setTotalBallsPlayed(0L);
-		player.getBattingStats().setTotalRunsScored(0L);
-		player.getBattingStats().setBattingAverage(0.0);
-		player.getBattingStats().setInningsBatted(0L);
-		player.getBattingStats().setStrikeRate(0.0);
-		// Initializing bowling stats
-		player.getBowlingStats().setEconomyRate(0.00);
-		player.getBowlingStats().setOversBowled(0L);
-		player.getBowlingStats().setWicketsTaken(0L);
-		player.getBowlingStats().setBestFiguresRunsGiven(0L);
-		player.getBowlingStats().setBestFiguresWicket(0L);
-		player.getBowlingStats().setTotalRunsGiven(0L);
-		return player;
-	}
 }
