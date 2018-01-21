@@ -1,0 +1,8 @@
+{
+  "language": "java",
+  "group": "stable",
+  "dist": "trusty",
+  "os": "linux",
+  "install": "mvn install -Dspring.profiles.active=dev -DskipTests=true -Dmaven.javadoc.skip=true -B -V",
+  "test": "mvn test -Dspring.profiles.active=dev"
+}
