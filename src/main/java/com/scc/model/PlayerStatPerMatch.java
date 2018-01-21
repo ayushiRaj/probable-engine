@@ -1,11 +1,20 @@
 package com.scc.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Entity
 public class PlayerStatPerMatch {
@@ -25,6 +34,14 @@ public class PlayerStatPerMatch {
 	private Long oversBowled;
 	private Long runsGiven;
 	private Long wicketsTaken;
+	private Integer sixes;
+	private Integer fours;
+	private Integer wides;
+	private Integer noBalls;
+	@Temporal(TemporalType.DATE)
+	private Date date;
+	@Enumerated(EnumType.STRING)
+	private MatchType matchType;
 
 	public Long getId() {
 		return id;
@@ -106,13 +123,63 @@ public class PlayerStatPerMatch {
 		this.wicketsTaken = wicketsTaken;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public MatchType getMatchType() {
+		return matchType;
+	}
+
+	public void setMatchType(MatchType matchType) {
+		this.matchType = matchType;
+	}
+
+	public Integer getSixes() {
+		return sixes;
+	}
+
+	public void setSixes(Integer sixes) {
+		this.sixes = sixes;
+	}
+
+	public Integer getFours() {
+		return fours;
+	}
+
+	public void setFours(Integer fours) {
+		this.fours = fours;
+	}
+
+	public Integer getWides() {
+		return wides;
+	}
+
+	public void setWides(Integer wides) {
+		this.wides = wides;
+	}
+
+	public Integer getNoBalls() {
+		return noBalls;
+	}
+
+	public void setNoBalls(Integer noBalls) {
+		this.noBalls = noBalls;
+	}
+
 	@Override
 	public String toString() {
-		return "PlayerStatPerMatch [id=" + id + ", player=" + player + ", runsScored=" + runsScored + ", ballsPlayed="
-				+ ballsPlayed + ", hasBatted=" + hasBatted + ", notOut=" + notOut + ", hasBowled=" + hasBowled
-				+ ", oversBowled=" + oversBowled + ", runsGiven=" + runsGiven + ", wicketsTaken=" + wicketsTaken + "]";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
-	
-	
 
 }

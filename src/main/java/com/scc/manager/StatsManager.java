@@ -1,8 +1,12 @@
 package com.scc.manager;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.scc.data.repository.PlayerRepository;
@@ -11,6 +15,8 @@ import com.scc.model.BattingStats;
 import com.scc.model.BowlingStats;
 import com.scc.model.Player;
 import com.scc.model.PlayerStatPerMatch;
+import com.scc.util.PlayerUtil;
+import com.scc.util.StatsUtil;
 
 @Component
 public class StatsManager {
@@ -21,37 +27,13 @@ public class StatsManager {
 	@Inject
 	private PlayerStatPerMatchRepository perMatchRepository;
 
-	public Player calculateEconomyAndBattingAverage(Player player) {
-		this.calculateBattingAverage(player);
-		this.calculateEconomyRate(player);
+	private final static Logger LOGGER = LoggerFactory.getLogger(StatsManager.class);
+
+	public Player calculateEconomyAndBattingAverageAndStrikeRate(Player player) {
+		player = StatsUtil.calculateBattingAverage(player);
+		player = StatsUtil.calculateEconomyRate(player);
+		player = StatsUtil.calculateStrikeRate(player);
 		playerRepo.save(player);
-		return player;
-	}
-
-	protected Player calculateBattingAverage(Player player) {
-		double battingAverage = 0;
-		try {
-			battingAverage = (1.00 * player.getBattingStats().getTotalRunsScored())
-					/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
-			String df = String.format("%.2f", battingAverage);
-			battingAverage = Double.parseDouble(df);
-		} catch (ArithmeticException e) {
-
-		}
-		player.getBattingStats().setBattingAverage(battingAverage);
-		return player;
-	}
-
-	protected Player calculateEconomyRate(Player player) {
-		double economyRate = 0;
-		try {
-			economyRate = (1.00 * player.getBowlingStats().getTotalRunsGiven())
-					/ player.getBowlingStats().getOversBowled();
-			String df = String.format("%.2f", economyRate);
-			economyRate = Double.parseDouble(df);
-		} catch (ArithmeticException e) {
-		}
-		player.getBowlingStats().setEconomyRate(economyRate);
 		return player;
 	}
 
@@ -69,21 +51,26 @@ public class StatsManager {
 				if (stat.isNotOut()) {
 					batting.setNotOuts(batting.getNotOuts() + 1);
 				}
-				player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
 				batting.setTotalBallsPlayed(batting.getTotalBallsPlayed() + stat.getBallsPlayed());
 				batting.setTotalRunsScored(batting.getTotalRunsScored() + stat.getRunsScored());
+				batting.setTotalFoursScored(batting.getTotalFoursScored() + stat.getFours());
+				batting.setTotalSixesScored(batting.getTotalSixesScored() + stat.getSixes());
 			}
 			if (stat.hasBowled()) {
 				this.updateBestBowlingFigures(stat);
 				bowling.setWicketsTaken(bowling.getWicketsTaken() + stat.getWicketsTaken());
 				bowling.setOversBowled(bowling.getOversBowled() + stat.getOversBowled());
 				bowling.setTotalRunsGiven(bowling.getTotalRunsGiven() + stat.getRunsGiven());
+				bowling.setTotalWidesBowled(bowling.getTotalWidesBowled() + stat.getWides());
+				bowling.setTotalNoBallsBowled(bowling.getTotalNoBallsBowled() + stat.getNoBalls());
 			}
-			this.calculateEconomyAndBattingAverage(player);
+			this.calculateEconomyAndBattingAverageAndStrikeRate(player);
+			player.setTotalMatchesPlayed(player.getTotalMatchesPlayed() + 1);
 			playerRepo.save(player);
 			return true;
 		} catch (Exception e) {
-			System.out.println("Exception caught");
+			LOGGER.error("Error caught while adding match data for playerId: {}", stat.getPlayer().getId());
+			LOGGER.error("Stringified stat object: {}", stat.toString());
 			return false;
 		}
 
@@ -103,14 +90,20 @@ public class StatsManager {
 				player.getBowlingStats().setBestFiguresRunsGiven(stat.getRunsGiven());
 			}
 		}
-		System.out.println(player.getBowlingStats().getBestFiguresRunsGiven());
 		if (stat.getWicketsTaken() >= player.getBowlingStats().getBestFiguresWicket()) {
 			player.getBowlingStats().setBestFiguresWicket(stat.getWicketsTaken());
 			if (stat.getRunsGiven() < player.getBowlingStats().getBestFiguresRunsGiven()) {
 				player.getBowlingStats().setBestFiguresRunsGiven(stat.getRunsGiven());
 			}
-
 		}
-		System.out.println(player.getBowlingStats().getBestFiguresRunsGiven());
+	}
+
+	public void reCalculatePlayerStatsAfterEdit(Long playerId) {
+		LOGGER.info("Request for recalculation with player-id: {}", playerId);
+		List<PlayerStatPerMatch> matchRecords = perMatchRepository.findByPlayerId(playerId, null);
+		Player player = playerRepo.findOne(playerId);
+		LOGGER.info("Recalculating stats for player name : {}", player.getPlayerName());
+		player.setTotalMatchesPlayed(matchRecords.size() + 0L);
+		PlayerUtil.recalculateStatsForAPlayer(player, matchRecords);
 	}
 }

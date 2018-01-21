@@ -5,8 +5,7 @@
 
 	<groupId>com.scc</groupId>
 	<artifactId>scc-stats</artifactId>
-	<version>1.2.0</version>
-
+	<version>1.0.2</version>
 	<name>scc-stats</name>
 	<description>Project to capture and provide stats for scc team</description>
 
@@ -40,11 +39,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-batch</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
 			<version>2.19.2</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
