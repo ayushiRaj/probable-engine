@@ -33,6 +33,11 @@ public class BowlingStats {
 	@Column(nullable = false)
 	private Integer totalNoBallsBowled;
 
+	public BowlingStats() {
+		this.economyRate = 0.0;
+		this.oversBowled = 0L;
+	}
+
 	public Long getOversBowled() {
 		return oversBowled;
 	}

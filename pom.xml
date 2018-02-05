@@ -5,7 +5,7 @@
 
 	<groupId>com.scc</groupId>
 	<artifactId>scc-stats</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>scc-stats</name>
 	<description>Project to capture and provide stats for scc team</description>
 
@@ -104,4 +104,7 @@
 	</build>
 
 
+	<scm>
+		<url>https://github.com/jayendra155/probable-engine.git</url>
+	</scm>
 </project>
