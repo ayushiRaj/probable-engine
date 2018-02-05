@@ -31,10 +31,12 @@ public class StatsUtil {
 	public static Player calculateEconomyRate(Player player) {
 		double economyRate = 0;
 		try {
-			economyRate = (1.00 * player.getBowlingStats().getTotalRunsGiven())
-					/ player.getBowlingStats().getOversBowled();
-			String df = String.format("%.2f", economyRate);
-			economyRate = Double.parseDouble(df);
+			if(player.getBowlingStats().getOversBowled()>0) {
+				economyRate = (1.00 * player.getBowlingStats().getTotalRunsGiven())
+						/ player.getBowlingStats().getOversBowled();
+				String df = String.format("%.2f", economyRate);
+				economyRate = Double.parseDouble(df);
+			}
 		} catch (ArithmeticException e) {
 			LOGGER.error("Arithmetic exception while calculating economy, default setting to 0 for player name : {}",
 					player.getPlayerName());
@@ -46,10 +48,12 @@ public class StatsUtil {
 	public static Player calculateStrikeRate(Player player) {
 		double strikeRate = 0;
 		try {
-			strikeRate = (100.00 * player.getBattingStats().getTotalRunsScored())
-					/ (player.getBattingStats().getTotalBallsPlayed());
-			String df = String.format("%.2f", strikeRate);
-			strikeRate = Double.parseDouble(df);
+			if(player.getBattingStats().getTotalBallsPlayed() > 0) {
+				strikeRate = (100.00 * player.getBattingStats().getTotalRunsScored())
+						/ (player.getBattingStats().getTotalBallsPlayed());
+				String df = String.format("%.2f", strikeRate);
+				strikeRate = Double.parseDouble(df);
+			}
 		} catch (ArithmeticException e) {
 			LOGGER.error(
 					"Arithmetic exception while calculating strike rate, default setting to 0 for player name : {}",

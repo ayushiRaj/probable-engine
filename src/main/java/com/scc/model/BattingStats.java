@@ -35,6 +35,11 @@ public class BattingStats {
 	@Column(nullable = false)
 	private Integer totalFoursScored;
 
+	public BattingStats() {
+		this.battingAverage = 0.0;
+		this.totalBallsPlayed = 0L;
+	}
+
 	public Long getInningsBatted() {
 		return inningsBatted;
 	}
