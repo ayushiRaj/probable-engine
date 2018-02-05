@@ -15,10 +15,12 @@ public class StatsUtil {
 	public static Player calculateBattingAverage(Player player) {
 		double battingAverage = 0;
 		try {
-			battingAverage = (1.00 * player.getBattingStats().getTotalRunsScored())
-					/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
-			String df = String.format("%.2f", battingAverage);
-			battingAverage = Double.parseDouble(df);
+			if(player.getBattingStats().getTotalBallsPlayed() > 0) {
+				battingAverage = (1.00 * player.getBattingStats().getTotalRunsScored())
+						/ (player.getBattingStats().getInningsBatted() - player.getBattingStats().getNotOuts());
+				String df = String.format("%.2f", battingAverage);
+				battingAverage = Double.parseDouble(df);
+			}
 		} catch (ArithmeticException e) {
 			LOGGER.error(
 					"Arithmetic exception while calculating batting average, default setting to 0 for player name : {}",
