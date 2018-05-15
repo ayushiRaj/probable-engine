@@ -5,4 +5,9 @@
   "os": "linux",
   "install": "mvn install -Dspring.profiles.active=dev -DskipTests=true -Dmaven.javadoc.skip=true -B -V",
   "test": "mvn test -Dspring.profiles.active=dev"
+ notifications:
+  slack:
+    rooms:
+      - eggshuddle:gVQmeCVEIYY3KqmZr0sKSH3c#projects-github
+      - eggshuddle:gVQmeCVEIYY3KqmZr0sKSH3c#scc
 }
